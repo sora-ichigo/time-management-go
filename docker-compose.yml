@@ -1,0 +1,29 @@
+version: '3'
+services:
+  app:
+    image: alpine:latest
+    depends_on:
+      - mysqld
+    ports:
+      - 8080:8080
+    environment:
+      DSN: 
+    volumes:
+      - ./:/app
+    # TODO:REST APIを実装した時に使用する
+    # entrypoint:
+    # - /app/bin/api-server
+
+  mysqld:
+    image: mysql:8.0.25
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_bin
+    volumes:
+      - ./schema:/docker-entrypoint-initdb.d
+      - ./.config/my.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_DATABASE: api-server
