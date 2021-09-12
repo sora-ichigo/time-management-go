@@ -14,3 +14,7 @@ migrate-up:
 .PHONY: migrate-down
 migrate-down:
 	docker-compose run --rm migrate migrate -database "$(DSN)" -path . down
+
+.PHONY: sqlboiler
+sqlboiler:
+	sqlboiler mysql
