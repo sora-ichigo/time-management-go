@@ -23,3 +23,10 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
       MYSQL_DATABASE: api-server
+  
+  migrate:
+    build: .
+    depends_on:
+      - mysqld
+    volumes:
+      - ./db:/db
