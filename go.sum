@@ -1,0 +1,7 @@
+github.com/go-chi/chi v1.5.4 h1:QHdzF2szwjqVV4wmByUnTcsbIg7UGaQ0tPF2t5GcAIs=
+github.com/go-chi/chi v1.5.4/go.mod h1:uaf8YgoFazUOkPBG7fxPftUylNumIev9awIWOENIuEg=
+github.com/go-chi/chi/v5 v5.0.4 h1:5e494iHzsYBiyXQAHHuI4tyJS9M3V84OuX3ufIIGHFo=
+github.com/go-chi/chi/v5 v5.0.4/go.mod h1:DslCQbL2OYiznFReuXYUmQ2hGd1aDpCnlMNITLSKoi8=
+github.com/jessevdk/go-flags v1.4.0/go.mod h1:4FA24M0QyGHXBuZZK/XkWh8h0e1EYbRYJSGM75WSRxI=
+github.com/lestrrat-go/server-starter v0.0.0-20210101230921-50cd1900b5bc h1:W0UVLQhE9AF0AzvKF6yTAfSrxsy8uEjo9/3ovhbiZuQ=
+github.com/lestrrat-go/server-starter v0.0.0-20210101230921-50cd1900b5bc/go.mod h1:qQfAJDHk9SgqMVIm+tnwzcUqjRVAEDWY++dN1PXV3vw=

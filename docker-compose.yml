@@ -9,10 +9,9 @@ services:
     environment:
       DSN: 
     volumes:
-      - ./:/app
-    # TODO:REST APIを実装した時に使用する
-    # entrypoint:
-    # - /app/bin/api-server
+      - ./bin:/app
+    entrypoint:
+      - /app/api-server
 
   mysqld:
     image: mysql:8.0.25
