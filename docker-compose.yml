@@ -18,11 +18,15 @@ services:
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_bin
-    volumes:
-      - ./schema:/docker-entrypoint-initdb.d
-      - ./.config/my.cnf
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
       MYSQL_DATABASE: api-server
+  
+  migrate:
+    build: .
+    depends_on:
+      - mysqld
+    volumes:
+      - ./db:/db
