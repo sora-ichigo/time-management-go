@@ -44,9 +44,7 @@ func main() {
 		Handler: mux,
 	}
 
-	fmt.Println("1")
 	go func() {
-		fmt.Println("2")
 		log.Printf("starting server on %s", l.Addr())
 		if err := server.Serve(l); err != nil {
 			log.Fatalf("server closed with %v", err)
