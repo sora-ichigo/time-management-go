@@ -1,7 +1,9 @@
+no-tests = true
+
 [mysql]
-  dbname  = "api-server"
-  host    = "127.0.0.1"
-  port    = 3307
-  user    = "root"
-  pass    = "root"
-  sslmode = "false"
+dbname  = "api-server"
+host    = "127.0.0.1"
+port    = 3307
+user    = "root"
+pass    = "root"
+sslmode = "false"
