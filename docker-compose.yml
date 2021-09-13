@@ -8,6 +8,8 @@ services:
       - 8080:8080
     volumes:
       - .:/app
+    environment:
+      DSN: admin:admin@(mysqld)/api-server?parseTime=true
     entrypoint:
       - bin/api-server
 
