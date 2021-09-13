@@ -11,8 +11,6 @@ import (
 	"syscall"
 	"time"
 
-	"starter-restapi-golang/app/server"
-
 	"github.com/go-chi/chi/v5"
 	"github.com/lestrrat-go/server-starter/listener"
 )
@@ -34,7 +32,7 @@ func createRouter() chi.Router {
 	})
 
 	mux.Route("/users", func(mux chi.Router) {
-		mux.Get("/", server.GetUsersHandler)
+		//	mux.Get("/", server.GetUsersHandler)
 	})
 	return mux
 }

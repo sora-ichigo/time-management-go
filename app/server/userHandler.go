@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"database/sql"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -10,8 +11,21 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
-	users, err := models.Users().AllG(context.Context)
+type UserHandler interface {
+	GetUsersHandler(w http.ResponseWriter, r *http.Request)
+}
+
+type userHandlerImpl struct {
+	ctx context.Context
+	db  *sql.DB
+}
+
+func NewUserHandler(ctx context.Context, db *sql.DB) UserHandler {
+	return &userHandlerImpl{ctx: ctx, db: db}
+}
+
+func (u *userHandlerImpl) GetUsersHandler(w http.ResponseWriter, r *http.Request) {
+	users, err := models.Users().All(u.ctx, u.db)
 	if err != nil {
 		log.Fatalf("failed models.Users(): %v", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
