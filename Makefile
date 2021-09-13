@@ -19,4 +19,4 @@ migrate-down:
 
 .PHONY: sqlboiler
 sqlboiler:
-	sqlboiler mysql --output $(SQLBOILER_OUTPUT)
+	sqlboiler mysql --output $(SQLBOILER_OUTPUT) --add-global-variants
