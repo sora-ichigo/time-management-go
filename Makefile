@@ -5,6 +5,11 @@ MAIN_PATH ?= cmd/server.go
 DSN ?= mysql://root:root@(mysqld)/api-server
 SQLBOILER_OUTPUT ?= app/models
 
+.PHONY: setup
+setup:
+	docker-compose build && \
+	docker-compose exec app migrate -database "$(DSN)" -path migrate/. up
+
 .PHONY: build
 build: 
 	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $(BIN_OUTPUT) $(MAIN_PATH)
