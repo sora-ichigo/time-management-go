@@ -15,6 +15,8 @@ This Repository is RESTAPI quick start template.
 
 ☑️ Makefile
 
+☑️ GitHub Action
+
 ## Development
 ### Setup
 you need to install docker, docker-compose, golang
