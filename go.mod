@@ -11,6 +11,7 @@ require (
 	github.com/lestrrat-go/server-starter v0.0.0-20210101230921-50cd1900b5bc // indirect
 	github.com/spf13/viper v1.6.3 // indirect
 	github.com/volatiletech/randomize v0.0.1 // indirect
+	github.com/volatiletech/sqlboiler v3.7.1+incompatible // indirect
 	github.com/volatiletech/sqlboiler/v4 v4.6.0 // indirect
 	github.com/volatiletech/strmangle v0.0.1 // indirect
 )
