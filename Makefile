@@ -3,6 +3,7 @@ GOARCH ?= amd64
 BIN_OUTPUT ?= bin/api-server
 MAIN_PATH ?= cmd/server.go
 DSN ?= mysql://root:root@(mysqld)/api-server
+SQLBOILER_OUTPUT ?= app/models
 
 .PHONY: build
 build: 
@@ -18,4 +19,4 @@ migrate-down:
 
 .PHONY: sqlboiler
 sqlboiler:
-	sqlboiler mysql
+	sqlboiler mysql --output $(SQLBOILER_OUTPUT)
