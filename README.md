@@ -1,5 +1,5 @@
 # Golang REST API template
-This Repository is RESTAPI quick start template.
+This Repository is quick start template for REST API.
 
 ☑️ docker-compose
 
