@@ -5,6 +5,6 @@ RUN apt-get install -y curl gnupg2 vim
 RUN curl -L https://github.com/golang-migrate/migrate/releases/download/v4.11.0/migrate.linux-amd64.tar.gz | tar xvz
 RUN mv ./migrate.linux-amd64 /usr/bin/migrate
 
-RUN mkdir db
-WORKDIR db
-ADD ./db .
+RUN mkdir app
+WORKDIR app 
+ADD . .

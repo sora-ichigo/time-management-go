@@ -1,32 +1,27 @@
 version: '3'
 services:
   app:
-    image: alpine:latest
+    build: .
     depends_on:
       - mysqld
     ports:
       - 8080:8080
-    environment:
-      DSN: 
     volumes:
-      - ./bin:/app
+      - .:/app
+    environment:
+      DSN: admin:admin@(mysqld)/api-server?parseTime=true
     entrypoint:
-      - /app/api-server
+      - bin/api-server
 
   mysqld:
     image: mysql:8.0.25
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_bin
+    ports:
+      - 3307:3306
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
       MYSQL_DATABASE: api-server
-  
-  migrate:
-    build: .
-    depends_on:
-      - mysqld
-    volumes:
-      - ./db:/db

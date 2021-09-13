@@ -2,12 +2,14 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"log"
 	"net"
 	"net/http"
 	"os"
 	"os/signal"
+	"starter-restapi-golang/app/server"
 	"syscall"
 	"time"
 
@@ -25,23 +27,40 @@ func netListen(network, addr string) (net.Listener, error) {
 	return net.Listen(network, addr)
 }
 
-func createRouter() chi.Router {
+func createRouter(userHandler server.UserHandler) chi.Router {
 	mux := chi.NewRouter()
 	mux.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
+	})
+
+	mux.Route("/users", func(mux chi.Router) {
+		mux.Get("/", userHandler.GetUsersHandler)
 	})
 	return mux
 }
 
 func main() {
+	run()
+}
+
+func run() {
+	db, err := sql.Open("mysql", os.Getenv("DSN"))
+	if err != nil {
+		log.Fatalf("failed sql open : %v", err)
+	}
+
+	ctx := context.Background()
+
+	userHandler := server.NewUserHandler(ctx, db)
+
+	mux := createRouter(userHandler)
+	server := http.Server{
+		Handler: mux,
+	}
+
 	l, err := netListen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {
 		log.Fatalf("failded to listen: %v", err)
-	}
-
-	mux := createRouter()
-	server := http.Server{
-		Handler: mux,
 	}
 
 	go func() {
@@ -64,4 +83,5 @@ func main() {
 		log.Fatalf("failed to graceful shutdown: %v", err)
 	}
 	log.Printf("server shutdown")
+
 }
