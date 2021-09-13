@@ -10,11 +10,11 @@ build:
 
 .PHONY: migrate-up
 migrate-up:
-	docker-compose exec app migrate -database "$(DSN)" -path db/. up
+	docker-compose exec app migrate -database "$(DSN)" -path migrate/. up
 
 .PHONY: migrate-down
 migrate-down:
-	docker-compose exec app migrate -database "$(DSN)" -path db/. down
+	docker-compose exec app migrate -database "$(DSN)" -path migrate/. down
 
 .PHONY: sqlboiler
 sqlboiler:
