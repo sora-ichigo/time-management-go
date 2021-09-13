@@ -17,6 +17,7 @@ migrate-up:
 migrate-down:
 	docker-compose exec app migrate -database "$(DSN)" -path migrate/. down
 
-.PHONY: sqlboiler
-sqlboiler:
-	sqlboiler mysql --output $(SQLBOILER_OUTPUT) --add-global-variants
+.PHONY: gen
+gen:
+	go generate ./...
+

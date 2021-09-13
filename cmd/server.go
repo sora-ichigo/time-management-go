@@ -2,13 +2,13 @@ package main
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"log"
 	"net"
 	"net/http"
 	"os"
 	"os/signal"
+	"starter-restapi-golang/app/di"
 	"starter-restapi-golang/app/server"
 	"syscall"
 	"time"
@@ -44,16 +44,16 @@ func main() {
 }
 
 func run() {
-	db, err := sql.Open("mysql", os.Getenv("DSN"))
-	if err != nil {
-		log.Fatalf("failed sql open : %v", err)
-	}
-
 	ctx := context.Background()
 
-	userHandler := server.NewUserHandler(ctx, db)
+	app, cleanup, err := di.NewApp(ctx)
+	if err != nil {
+		log.Fatalf("server closed with %v", err)
+		return
+	}
+	defer cleanup()
 
-	mux := createRouter(userHandler)
+	mux := createRouter(app.UserHandler)
 	server := http.Server{
 		Handler: mux,
 	}
@@ -61,12 +61,14 @@ func run() {
 	l, err := netListen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {
 		log.Fatalf("failded to listen: %v", err)
+		return
 	}
 
 	go func() {
 		log.Printf("starting server on %s", l.Addr())
 		if err := server.Serve(l); err != nil {
 			log.Fatalf("server closed with %v", err)
+			return
 		}
 	}()
 
