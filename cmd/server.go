@@ -34,6 +34,10 @@ func createRouter() chi.Router {
 }
 
 func main() {
+	run()
+}
+
+func run() {
 	l, err := netListen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {
 		log.Fatalf("failded to listen: %v", err)
@@ -64,4 +68,5 @@ func main() {
 		log.Fatalf("failed to graceful shutdown: %v", err)
 	}
 	log.Printf("server shutdown")
+
 }
