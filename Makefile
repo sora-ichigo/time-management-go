@@ -7,8 +7,8 @@ SQLBOILER_OUTPUT ?= app/models
 
 .PHONY: setup
 setup:
-	docker-compose build && \
-	docker-compose exec app migrate -database "$(DSN)" -path migrate/. up
+	go mod tidy 
+	docker-compose build
 
 .PHONY: build
 build: 
