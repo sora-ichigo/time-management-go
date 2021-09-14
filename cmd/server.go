@@ -15,6 +15,7 @@ import (
 
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/cors"
 	"github.com/lestrrat-go/server-starter/listener"
 )
 
@@ -31,6 +32,11 @@ func netListen(network, addr string) (net.Listener, error) {
 func createRouter(userHandler server.UserHandler) chi.Router {
 	mux := chi.NewRouter()
 	mux.Use(middleware.Logger)
+	mux.Use(cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"},
+		AllowedHeaders: []string{"Accepts", "Authorization", "Content-Type", "X-CSRF-Token"},
+	}).Handler)
 
 	mux.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
