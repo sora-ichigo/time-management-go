@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"starter-restapi-golang/app/models"
+	"starter-restapi-golang/app/validator"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -16,12 +17,13 @@ type ContentHandler interface {
 }
 
 type contentHandlerImpl struct {
-	ctx context.Context
-	db  *sql.DB
+	ctx       context.Context
+	db        *sql.DB
+	validator validator.ContentValidator
 }
 
-func NewContentHandler(ctx context.Context, db *sql.DB) ContentHandler {
-	return &contentHandlerImpl{ctx: ctx, db: db}
+func NewContentHandler(ctx context.Context, db *sql.DB, v validator.ContentValidator) ContentHandler {
+	return &contentHandlerImpl{ctx: ctx, db: db, validator: v}
 }
 
 func (u *contentHandlerImpl) GetContentsHandler(w http.ResponseWriter, r *http.Request) {
