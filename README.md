@@ -19,7 +19,8 @@ This Repository is quick start template for REST API.
 
 ## Development
 ### Setup
-you need to install docker, docker-compose, golang
+- you need to install docker, docker-compose, golang.
+- you need to setting these path.
 ```sh
 $ git clone (URL)
 $ make setup
