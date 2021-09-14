@@ -8,10 +8,10 @@ import (
 	"github.com/google/wire"
 )
 
-func provideUserHandler(ctx context.Context, db *sql.DB) server.UserHandler {
-	return server.NewUserHandler(ctx, db)
+func provideContentHandler(ctx context.Context, db *sql.DB) server.ContentHandler {
+	return server.NewContentHandler(ctx, db)
 }
 
 var ServerSet = wire.NewSet(
-	provideUserHandler,
+	provideContentHandler,
 )

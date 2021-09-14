@@ -13,10 +13,10 @@ import (
 
 func NewApp(ctx context.Context) (*App, func(), error) {
 	db := provideDB()
-	userHandler := provideUserHandler(ctx, db)
+	contentHandler := provideContentHandler(ctx, db)
 	app := &App{
-		UserHandler: userHandler,
-		Db:          db,
+		ContentHandler: contentHandler,
+		Db:             db,
 	}
 	return app, func() {
 	}, nil
