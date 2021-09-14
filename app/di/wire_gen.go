@@ -13,7 +13,8 @@ import (
 
 func NewApp(ctx context.Context) (*App, func(), error) {
 	db := provideDB()
-	contentHandler := provideContentHandler(ctx, db)
+	contentValidator := provideContentValidator()
+	contentHandler := provideContentHandler(ctx, db, contentValidator)
 	app := &App{
 		ContentHandler: contentHandler,
 		Db:             db,
