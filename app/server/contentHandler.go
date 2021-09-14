@@ -11,27 +11,27 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-type UserHandler interface {
-	GetUsersHandler(w http.ResponseWriter, r *http.Request)
+type ContentHandler interface {
+	GetContentsHandler(w http.ResponseWriter, r *http.Request)
 }
 
-type userHandlerImpl struct {
+type contentHandlerImpl struct {
 	ctx context.Context
 	db  *sql.DB
 }
 
-func NewUserHandler(ctx context.Context, db *sql.DB) UserHandler {
-	return &userHandlerImpl{ctx: ctx, db: db}
+func NewContentHandler(ctx context.Context, db *sql.DB) ContentHandler {
+	return &contentHandlerImpl{ctx: ctx, db: db}
 }
 
-func (u *userHandlerImpl) GetUsersHandler(w http.ResponseWriter, r *http.Request) {
-	users, err := models.Users().All(u.ctx, u.db)
+func (u *contentHandlerImpl) GetContentsHandler(w http.ResponseWriter, r *http.Request) {
+	contents, err := models.Contents().All(u.ctx, u.db)
 	if err != nil {
-		log.Fatalf("failed models.Users(): %v", err)
+		log.Fatalf("failed models.Contents(): %v", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
-	b, err := json.Marshal(users)
+	b, err := json.Marshal(contents)
 	if err != nil {
 		log.Printf("failed to encode json. err: %v", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
