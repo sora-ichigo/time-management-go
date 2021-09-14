@@ -11,20 +11,20 @@ type ContentValidator interface {
 	Valid() error
 }
 
-type contentValidator models.Content
+type contentValidatorImpl models.Content
 
 func NewContentValidator() ContentValidator {
-	return contentValidator{}
+	return contentValidatorImpl{}
 }
 
-func (c contentValidator) Set(content models.Content) ContentValidator {
+func (c contentValidatorImpl) Set(content models.Content) ContentValidator {
 	c.ID = content.ID
 	c.Name = content.Name
 	c.Text = content.Text
 	return c
 }
 
-func (c contentValidator) Valid() error {
+func (c contentValidatorImpl) Valid() error {
 	return validation.ValidateStruct(&c,
 		validation.Field(&c.Name, validation.Required),
 		validation.Field(&c.Text, validation.Required),
