@@ -13,6 +13,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
 	"github.com/lestrrat-go/server-starter/listener"
 )
@@ -29,6 +30,8 @@ func netListen(network, addr string) (net.Listener, error) {
 
 func createRouter(userHandler server.UserHandler) chi.Router {
 	mux := chi.NewRouter()
+	mux.Use(middleware.Logger)
+
 	mux.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	})
