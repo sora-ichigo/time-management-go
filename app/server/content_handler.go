@@ -10,6 +10,7 @@ import (
 	"starter-restapi-golang/app/validator"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 type ContentHandler interface {
@@ -21,6 +22,11 @@ type contentHandlerImpl struct {
 	ctx       context.Context
 	db        *sql.DB
 	validator validator.ContentValidator
+}
+
+type postContentBody struct {
+	Name string
+	Text string
 }
 
 func NewContentHandler(ctx context.Context, db *sql.DB, v validator.ContentValidator) ContentHandler {
@@ -50,5 +56,25 @@ func (u *contentHandlerImpl) GetContentsHandler(w http.ResponseWriter, r *http.R
 }
 
 func (u *contentHandlerImpl) PostContentsHandler(w http.ResponseWriter, r *http.Request) {
+	body := postContentBody{}
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		log.Printf("Invalid request body. err: %v", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	content := models.Content{Name: body.Name, Text: body.Text}
+	err := u.validator.Set(content).Valid()
+	if err != nil {
+		log.Printf("Invalid request body. err: %v", err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	err = content.Insert(u.ctx, u.db, boil.Infer())
+	if err != nil {
+		log.Printf("failed to create content. err: %v", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+	}
 	w.WriteHeader(http.StatusOK)
 }
