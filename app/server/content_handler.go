@@ -14,6 +14,7 @@ import (
 
 type ContentHandler interface {
 	GetContentsHandler(w http.ResponseWriter, r *http.Request)
+	PostContentsHandler(w http.ResponseWriter, r *http.Request)
 }
 
 type contentHandlerImpl struct {
@@ -46,4 +47,8 @@ func (u *contentHandlerImpl) GetContentsHandler(w http.ResponseWriter, r *http.R
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
+}
+
+func (u *contentHandlerImpl) PostContentsHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
 }
