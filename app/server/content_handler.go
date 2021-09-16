@@ -16,6 +16,7 @@ import (
 type ContentHandler interface {
 	GetContentsHandler(w http.ResponseWriter, r *http.Request)
 	PostContentsHandler(w http.ResponseWriter, r *http.Request)
+	PutContentHandler(w http.ResponseWriter, r *http.Request)
 }
 
 type contentHandlerImpl struct {
@@ -76,5 +77,9 @@ func (u *contentHandlerImpl) PostContentsHandler(w http.ResponseWriter, r *http.
 		log.Printf("failed to create content. err: %v", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 	}
+	w.WriteHeader(http.StatusOK)
+}
+
+func (u *contentHandlerImpl) PutContentHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
