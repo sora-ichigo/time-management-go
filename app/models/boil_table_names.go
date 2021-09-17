@@ -4,9 +4,9 @@
 package models
 
 var TableNames = struct {
+	Contents         string
 	SchemaMigrations string
-	Users            string
 }{
+	Contents:         "contents",
 	SchemaMigrations: "schema_migrations",
-	Users:            "users",
 }

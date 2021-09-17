@@ -9,6 +9,6 @@ import (
 )
 
 func NewApp(ctx context.Context) (*App, func(), error) {
-	wire.Build(wire.Struct(new(App), "*"), ServerSet, ConfigSet)
+	wire.Build(wire.Struct(new(App), "*"), ServerSet, ConfigSet, ValidatorSet)
 	return nil, nil, nil
 }

@@ -7,6 +7,7 @@ require (
 	github.com/go-chi/chi v1.5.4 // indirect
 	github.com/go-chi/chi/v5 v5.0.4 // indirect
 	github.com/go-chi/cors v1.2.0 // indirect
+	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/google/wire v0.5.0 // indirect
 	github.com/kat-co/vala v0.0.0-20170210184112-42e1d8b61f12 // indirect

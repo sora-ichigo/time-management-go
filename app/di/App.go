@@ -6,6 +6,6 @@ import (
 )
 
 type App struct {
-	UserHandler server.UserHandler
-	Db          *sql.DB
+	ContentHandler server.ContentHandler
+	Db             *sql.DB
 }
