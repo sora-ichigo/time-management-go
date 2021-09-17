@@ -19,6 +19,7 @@ type ContentHandler interface {
 	GetContentsHandler(w http.ResponseWriter, r *http.Request)
 	PostContentsHandler(w http.ResponseWriter, r *http.Request)
 	PutContentHandler(w http.ResponseWriter, r *http.Request)
+	DeleteContentHandler(w http.ResponseWriter, r *http.Request)
 }
 
 type contentHandlerImpl struct {
@@ -118,6 +119,29 @@ func (u *contentHandlerImpl) PutContentHandler(w http.ResponseWriter, r *http.Re
 	_, err = content.Update(u.ctx, u.db, boil.Infer())
 	if err != nil {
 		log.Printf("failed to update content. err: %v", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
+func (u *contentHandlerImpl) DeleteContentHandler(w http.ResponseWriter, r *http.Request) {
+	contentID, err := strconv.ParseUint(chi.URLParam(r, "contentID"), 10, 64)
+	if err != nil {
+		log.Printf("Invalid URLParam. err: %v", err)
+		http.NotFound(w, r)
+		return
+	}
+
+	content, err := models.FindContent(u.ctx, u.db, uint(contentID))
+	if err != nil {
+		log.Printf("failed to find content. err: %v", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	_, err = content.Delete(u.ctx, u.db)
+	if err != nil {
+		log.Printf("failed to delete content. err: %v", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 	}
 	w.WriteHeader(http.StatusOK)

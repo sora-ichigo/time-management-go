@@ -47,6 +47,7 @@ func createRouter(contentHandler server.ContentHandler) chi.Router {
 		mux.Post("/", contentHandler.PostContentsHandler)
 		mux.Route("/{contentID}", func(mux chi.Router) {
 			mux.Put("/", contentHandler.PutContentHandler)
+			mux.Delete("/", contentHandler.DeleteContentHandler)
 		})
 	})
 	return mux
