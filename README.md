@@ -11,6 +11,8 @@ This Repository is quick start template for REST API.
 
 ☑️ [wire](https://github.com/google/wire)
 
+☑️ [ozzo-validation](https://github.com/go-ozzo/ozzo-validation)
+
 ☑️ handler template
 
 ☑️ Makefile
