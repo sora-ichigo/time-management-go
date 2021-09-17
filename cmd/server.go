@@ -13,8 +13,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
 	"github.com/lestrrat-go/server-starter/listener"
 )

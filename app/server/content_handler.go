@@ -8,7 +8,9 @@ import (
 	"net/http"
 	"starter-restapi-golang/app/models"
 	"starter-restapi-golang/app/validator"
+	"strconv"
 
+	"github.com/go-chi/chi"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 )
@@ -29,6 +31,8 @@ type postContentBody struct {
 	Name string
 	Text string
 }
+
+type putContentBody postContentBody
 
 func NewContentHandler(ctx context.Context, db *sql.DB, v validator.ContentValidator) ContentHandler {
 	return &contentHandlerImpl{ctx: ctx, db: db, validator: v}
@@ -81,5 +85,40 @@ func (u *contentHandlerImpl) PostContentsHandler(w http.ResponseWriter, r *http.
 }
 
 func (u *contentHandlerImpl) PutContentHandler(w http.ResponseWriter, r *http.Request) {
+	contentID, err := strconv.ParseUint(chi.URLParam(r, "contentID"), 10, 64)
+	if err != nil {
+		log.Printf("Invalid URLParam. err: %v", err)
+		http.NotFound(w, r)
+		return
+	}
+
+	body := putContentBody{}
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		log.Printf("Invalid request body. err: %v", err)
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
+
+	content, err := models.FindContent(u.ctx, u.db, uint(contentID))
+	if err != nil {
+		log.Printf("failed to find content. err: %v", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	content.Name = body.Name
+	content.Text = body.Text
+
+	err = u.validator.Set(*content).Valid()
+	if err != nil {
+		log.Printf("Invalid request body. err: %v", err)
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	_, err = content.Update(u.ctx, u.db, boil.Infer())
+	if err != nil {
+		log.Printf("failed to update content. err: %v", err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+	}
 	w.WriteHeader(http.StatusOK)
 }
