@@ -68,19 +68,14 @@ func run() {
 	defer cleanup()
 
 	mux := createRouter(app.ContentHandler)
-	server := http.Server{
+	svr := http.Server{
+		Addr:    fmt.Sprintf(":%d", port),
 		Handler: mux,
 	}
 
-	l, err := netListen("tcp", fmt.Sprintf(":%d", port))
-	if err != nil {
-		log.Fatalf("failded to listen: %v", err)
-		return
-	}
-
 	go func() {
-		log.Printf("starting server on %s", l.Addr())
-		if err := server.Serve(l); err != nil {
+		log.Printf("starting server on %s", svr.Addr)
+		if err := svr.ListenAndServe(); err != nil {
 			log.Fatalf("server closed with %v", err)
 			return
 		}
@@ -95,9 +90,8 @@ func run() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	if err := server.Shutdown(ctx); err != nil {
+	if err := svr.Shutdown(ctx); err != nil {
 		log.Fatalf("failed to graceful shutdown: %v", err)
 	}
 	log.Printf("server shutdown")
-
 }
