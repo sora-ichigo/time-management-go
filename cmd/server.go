@@ -29,7 +29,7 @@ func netListen(network, addr string) (net.Listener, error) {
 	return net.Listen(network, addr)
 }
 
-func createRouter(contentHandler server.ContentHandler) chi.Router {
+func createRouter(contentHandler server.ContentServer) chi.Router {
 	mux := chi.NewRouter()
 	mux.Use(middleware.Logger)
 	mux.Use(cors.New(cors.Options{
@@ -43,11 +43,11 @@ func createRouter(contentHandler server.ContentHandler) chi.Router {
 	})
 
 	mux.Route("/contents", func(mux chi.Router) {
-		mux.Get("/", contentHandler.GetContentsHandler)
-		mux.Post("/", contentHandler.PostContentsHandler)
+		mux.Get("/", contentHandler.GetContents)
+		mux.Post("/", contentHandler.CreateContent)
 		mux.Route("/{contentID}", func(mux chi.Router) {
-			mux.Put("/", contentHandler.PutContentHandler)
-			mux.Delete("/", contentHandler.DeleteContentHandler)
+			mux.Put("/", contentHandler.UpdateContent)
+			mux.Delete("/", contentHandler.DeleteContent)
 		})
 	})
 	return mux
@@ -67,20 +67,15 @@ func run() {
 	}
 	defer cleanup()
 
-	mux := createRouter(app.ContentHandler)
-	server := http.Server{
+	mux := createRouter(app.ContentServer)
+	svr := http.Server{
+		Addr:    fmt.Sprintf(":%d", port),
 		Handler: mux,
 	}
 
-	l, err := netListen("tcp", fmt.Sprintf(":%d", port))
-	if err != nil {
-		log.Fatalf("failded to listen: %v", err)
-		return
-	}
-
 	go func() {
-		log.Printf("starting server on %s", l.Addr())
-		if err := server.Serve(l); err != nil {
+		log.Printf("starting server on %s", svr.Addr)
+		if err := svr.ListenAndServe(); err != nil {
 			log.Fatalf("server closed with %v", err)
 			return
 		}
@@ -95,9 +90,8 @@ func run() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	if err := server.Shutdown(ctx); err != nil {
+	if err := svr.Shutdown(ctx); err != nil {
 		log.Fatalf("failed to graceful shutdown: %v", err)
 	}
 	log.Printf("server shutdown")
-
 }

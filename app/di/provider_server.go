@@ -9,10 +9,10 @@ import (
 	"github.com/google/wire"
 )
 
-func provideContentHandler(ctx context.Context, db *sql.DB, v validator.ContentValidator) server.ContentHandler {
-	return server.NewContentHandler(ctx, db, v)
+func provideContentServer(ctx context.Context, db *sql.DB, v validator.ContentValidator) server.ContentServer {
+	return server.NewContentServer(ctx, db, v)
 }
 
 var ServerSet = wire.NewSet(
-	provideContentHandler,
+	provideContentServer,
 )

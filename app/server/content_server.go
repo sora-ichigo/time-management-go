@@ -15,31 +15,31 @@ import (
 	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
-type ContentHandler interface {
-	GetContentsHandler(w http.ResponseWriter, r *http.Request)
-	PostContentsHandler(w http.ResponseWriter, r *http.Request)
-	PutContentHandler(w http.ResponseWriter, r *http.Request)
-	DeleteContentHandler(w http.ResponseWriter, r *http.Request)
+type ContentServer interface {
+	GetContents(w http.ResponseWriter, r *http.Request)
+	CreateContent(w http.ResponseWriter, r *http.Request)
+	UpdateContent(w http.ResponseWriter, r *http.Request)
+	DeleteContent(w http.ResponseWriter, r *http.Request)
 }
 
-type contentHandlerImpl struct {
+type contentServerImpl struct {
 	ctx       context.Context
 	db        *sql.DB
 	validator validator.ContentValidator
 }
 
-type postContentBody struct {
+type createContentBody struct {
 	Name string
 	Text string
 }
 
-type putContentBody postContentBody
+type updateContentBody createContentBody
 
-func NewContentHandler(ctx context.Context, db *sql.DB, v validator.ContentValidator) ContentHandler {
-	return &contentHandlerImpl{ctx: ctx, db: db, validator: v}
+func NewContentServer(ctx context.Context, db *sql.DB, v validator.ContentValidator) ContentServer {
+	return &contentServerImpl{ctx: ctx, db: db, validator: v}
 }
 
-func (u *contentHandlerImpl) GetContentsHandler(w http.ResponseWriter, r *http.Request) {
+func (u *contentServerImpl) GetContents(w http.ResponseWriter, r *http.Request) {
 	contents, err := models.Contents().All(u.ctx, u.db)
 	if err != nil {
 		log.Fatalf("failed models.Contents(): %v", err)
@@ -61,8 +61,8 @@ func (u *contentHandlerImpl) GetContentsHandler(w http.ResponseWriter, r *http.R
 	}
 }
 
-func (u *contentHandlerImpl) PostContentsHandler(w http.ResponseWriter, r *http.Request) {
-	body := postContentBody{}
+func (u *contentServerImpl) CreateContent(w http.ResponseWriter, r *http.Request) {
+	body := createContentBody{}
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		log.Printf("Invalid request body. err: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
@@ -85,7 +85,7 @@ func (u *contentHandlerImpl) PostContentsHandler(w http.ResponseWriter, r *http.
 	w.WriteHeader(http.StatusOK)
 }
 
-func (u *contentHandlerImpl) PutContentHandler(w http.ResponseWriter, r *http.Request) {
+func (u *contentServerImpl) UpdateContent(w http.ResponseWriter, r *http.Request) {
 	contentID, err := strconv.ParseUint(chi.URLParam(r, "contentID"), 10, 64)
 	if err != nil {
 		log.Printf("Invalid URLParam. err: %v", err)
@@ -93,7 +93,7 @@ func (u *contentHandlerImpl) PutContentHandler(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	body := putContentBody{}
+	body := updateContentBody{}
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		log.Printf("Invalid request body. err: %v", err)
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
@@ -124,7 +124,7 @@ func (u *contentHandlerImpl) PutContentHandler(w http.ResponseWriter, r *http.Re
 	w.WriteHeader(http.StatusOK)
 }
 
-func (u *contentHandlerImpl) DeleteContentHandler(w http.ResponseWriter, r *http.Request) {
+func (u *contentServerImpl) DeleteContent(w http.ResponseWriter, r *http.Request) {
 	contentID, err := strconv.ParseUint(chi.URLParam(r, "contentID"), 10, 64)
 	if err != nil {
 		log.Printf("Invalid URLParam. err: %v", err)
