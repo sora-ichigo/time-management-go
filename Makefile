@@ -8,6 +8,8 @@ SQLBOILER_OUTPUT ?= app/models
 .PHONY: setup
 setup:
 	go mod tidy 
+	go get github.com/google/wire/cmd/wire@v0.5.0
+	go generate ./...
 	docker-compose build
 
 .PHONY: build

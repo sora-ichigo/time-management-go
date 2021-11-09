@@ -30,7 +30,8 @@ $ make setup
 
 ### Run
 ```sh
-$ make start
+$ docker compose start
+$ go run ./cmd/server.go
 ```
 
 ### Build

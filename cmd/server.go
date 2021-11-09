@@ -29,7 +29,7 @@ func netListen(network, addr string) (net.Listener, error) {
 	return net.Listen(network, addr)
 }
 
-func createRouter(contentHandler server.ContentHandler) chi.Router {
+func createRouter(contentHandler server.ContentServer) chi.Router {
 	mux := chi.NewRouter()
 	mux.Use(middleware.Logger)
 	mux.Use(cors.New(cors.Options{
@@ -43,11 +43,11 @@ func createRouter(contentHandler server.ContentHandler) chi.Router {
 	})
 
 	mux.Route("/contents", func(mux chi.Router) {
-		mux.Get("/", contentHandler.GetContentsHandler)
-		mux.Post("/", contentHandler.PostContentsHandler)
+		mux.Get("/", contentHandler.GetContents)
+		mux.Post("/", contentHandler.CreateContent)
 		mux.Route("/{contentID}", func(mux chi.Router) {
-			mux.Put("/", contentHandler.PutContentHandler)
-			mux.Delete("/", contentHandler.DeleteContentHandler)
+			mux.Put("/", contentHandler.UpdateContent)
+			mux.Delete("/", contentHandler.DeleteContent)
 		})
 	})
 	return mux
@@ -67,7 +67,7 @@ func run() {
 	}
 	defer cleanup()
 
-	mux := createRouter(app.ContentHandler)
+	mux := createRouter(app.ContentServer)
 	svr := http.Server{
 		Addr:    fmt.Sprintf(":%d", port),
 		Handler: mux,
