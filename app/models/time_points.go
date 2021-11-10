@@ -356,6 +356,11 @@ func AddTimePointHook(hookPoint boil.HookPoint, timePointHook TimePointHook) {
 	}
 }
 
+// OneG returns a single timePoint record from the query using the global executor.
+func (q timePointQuery) OneG(ctx context.Context) (*TimePoint, error) {
+	return q.One(ctx, boil.GetContextDB())
+}
+
 // One returns a single timePoint record from the query.
 func (q timePointQuery) One(ctx context.Context, exec boil.ContextExecutor) (*TimePoint, error) {
 	o := &TimePoint{}
@@ -375,6 +380,11 @@ func (q timePointQuery) One(ctx context.Context, exec boil.ContextExecutor) (*Ti
 	}
 
 	return o, nil
+}
+
+// AllG returns all TimePoint records from the query using the global executor.
+func (q timePointQuery) AllG(ctx context.Context) (TimePointSlice, error) {
+	return q.All(ctx, boil.GetContextDB())
 }
 
 // All returns all TimePoint records from the query.
@@ -397,6 +407,11 @@ func (q timePointQuery) All(ctx context.Context, exec boil.ContextExecutor) (Tim
 	return o, nil
 }
 
+// CountG returns the count of all TimePoint records in the query, and panics on error.
+func (q timePointQuery) CountG(ctx context.Context) (int64, error) {
+	return q.Count(ctx, boil.GetContextDB())
+}
+
 // Count returns the count of all TimePoint records in the query.
 func (q timePointQuery) Count(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
 	var count int64
@@ -410,6 +425,11 @@ func (q timePointQuery) Count(ctx context.Context, exec boil.ContextExecutor) (i
 	}
 
 	return count, nil
+}
+
+// ExistsG checks if the row exists in the table, and panics on error.
+func (q timePointQuery) ExistsG(ctx context.Context) (bool, error) {
+	return q.Exists(ctx, boil.GetContextDB())
 }
 
 // Exists checks if the row exists in the table.
@@ -432,6 +452,11 @@ func (q timePointQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (
 func TimePoints(mods ...qm.QueryMod) timePointQuery {
 	mods = append(mods, qm.From("`time_points`"))
 	return timePointQuery{NewQuery(mods...)}
+}
+
+// FindTimePointG retrieves a single record by ID.
+func FindTimePointG(ctx context.Context, iD uint, selectCols ...string) (*TimePoint, error) {
+	return FindTimePoint(ctx, boil.GetContextDB(), iD, selectCols...)
 }
 
 // FindTimePoint retrieves a single record by ID with an executor.
@@ -462,6 +487,11 @@ func FindTimePoint(ctx context.Context, exec boil.ContextExecutor, iD uint, sele
 	}
 
 	return timePointObj, nil
+}
+
+// InsertG a single record. See Insert for whitelist behavior description.
+func (o *TimePoint) InsertG(ctx context.Context, columns boil.Columns) error {
+	return o.Insert(ctx, boil.GetContextDB(), columns)
 }
 
 // Insert a single record using an executor.
@@ -570,6 +600,12 @@ CacheNoHooks:
 	return o.doAfterInsertHooks(ctx, exec)
 }
 
+// UpdateG a single TimePoint record using the global executor.
+// See Update for more documentation.
+func (o *TimePoint) UpdateG(ctx context.Context, columns boil.Columns) (int64, error) {
+	return o.Update(ctx, boil.GetContextDB(), columns)
+}
+
 // Update uses an executor to update the TimePoint.
 // See boil.Columns.UpdateColumnSet documentation to understand column list inference for updates.
 // Update does not automatically update the record in case of default values. Use .Reload() to refresh the records.
@@ -633,6 +669,11 @@ func (o *TimePoint) Update(ctx context.Context, exec boil.ContextExecutor, colum
 	return rowsAff, o.doAfterUpdateHooks(ctx, exec)
 }
 
+// UpdateAllG updates all rows with the specified column values.
+func (q timePointQuery) UpdateAllG(ctx context.Context, cols M) (int64, error) {
+	return q.UpdateAll(ctx, boil.GetContextDB(), cols)
+}
+
 // UpdateAll updates all rows with the specified column values.
 func (q timePointQuery) UpdateAll(ctx context.Context, exec boil.ContextExecutor, cols M) (int64, error) {
 	queries.SetUpdate(q.Query, cols)
@@ -648,6 +689,11 @@ func (q timePointQuery) UpdateAll(ctx context.Context, exec boil.ContextExecutor
 	}
 
 	return rowsAff, nil
+}
+
+// UpdateAllG updates all rows with the specified column values.
+func (o TimePointSlice) UpdateAllG(ctx context.Context, cols M) (int64, error) {
+	return o.UpdateAll(ctx, boil.GetContextDB(), cols)
 }
 
 // UpdateAll updates all rows with the specified column values, using an executor.
@@ -698,6 +744,12 @@ func (o TimePointSlice) UpdateAll(ctx context.Context, exec boil.ContextExecutor
 	return rowsAff, nil
 }
 
+// DeleteG deletes a single TimePoint record.
+// DeleteG will match against the primary key column to find the record to delete.
+func (o *TimePoint) DeleteG(ctx context.Context) (int64, error) {
+	return o.Delete(ctx, boil.GetContextDB())
+}
+
 // Delete deletes a single TimePoint record with an executor.
 // Delete will match against the primary key column to find the record to delete.
 func (o *TimePoint) Delete(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
@@ -734,6 +786,10 @@ func (o *TimePoint) Delete(ctx context.Context, exec boil.ContextExecutor) (int6
 	return rowsAff, nil
 }
 
+func (q timePointQuery) DeleteAllG(ctx context.Context) (int64, error) {
+	return q.DeleteAll(ctx, boil.GetContextDB())
+}
+
 // DeleteAll deletes all matching rows.
 func (q timePointQuery) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
 	if q.Query == nil {
@@ -753,6 +809,11 @@ func (q timePointQuery) DeleteAll(ctx context.Context, exec boil.ContextExecutor
 	}
 
 	return rowsAff, nil
+}
+
+// DeleteAllG deletes all rows in the slice.
+func (o TimePointSlice) DeleteAllG(ctx context.Context) (int64, error) {
+	return o.DeleteAll(ctx, boil.GetContextDB())
 }
 
 // DeleteAll deletes all rows in the slice, using an executor.
@@ -804,6 +865,15 @@ func (o TimePointSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor
 	return rowsAff, nil
 }
 
+// ReloadG refetches the object from the database using the primary keys.
+func (o *TimePoint) ReloadG(ctx context.Context) error {
+	if o == nil {
+		return errors.New("models: no TimePoint provided for reload")
+	}
+
+	return o.Reload(ctx, boil.GetContextDB())
+}
+
 // Reload refetches the object from the database
 // using the primary keys with an executor.
 func (o *TimePoint) Reload(ctx context.Context, exec boil.ContextExecutor) error {
@@ -814,6 +884,16 @@ func (o *TimePoint) Reload(ctx context.Context, exec boil.ContextExecutor) error
 
 	*o = *ret
 	return nil
+}
+
+// ReloadAllG refetches every row with matching primary key column values
+// and overwrites the original object slice with the newly updated slice.
+func (o *TimePointSlice) ReloadAllG(ctx context.Context) error {
+	if o == nil {
+		return errors.New("models: empty TimePointSlice provided for reload all")
+	}
+
+	return o.ReloadAll(ctx, boil.GetContextDB())
 }
 
 // ReloadAll refetches every row with matching primary key column values
@@ -845,6 +925,11 @@ func (o *TimePointSlice) ReloadAll(ctx context.Context, exec boil.ContextExecuto
 	return nil
 }
 
+// TimePointExistsG checks if the TimePoint row exists.
+func TimePointExistsG(ctx context.Context, iD uint) (bool, error) {
+	return TimePointExists(ctx, boil.GetContextDB(), iD)
+}
+
 // TimePointExists checks if the TimePoint row exists.
 func TimePointExists(ctx context.Context, exec boil.ContextExecutor, iD uint) (bool, error) {
 	var exists bool
@@ -863,6 +948,11 @@ func TimePointExists(ctx context.Context, exec boil.ContextExecutor, iD uint) (b
 	}
 
 	return exists, nil
+}
+
+// UpsertG attempts an insert, and does an update or ignore on conflict.
+func (o *TimePoint) UpsertG(ctx context.Context, updateColumns, insertColumns boil.Columns) error {
+	return o.Upsert(ctx, boil.GetContextDB(), updateColumns, insertColumns)
 }
 
 var mySQLTimePointUniqueColumns = []string{

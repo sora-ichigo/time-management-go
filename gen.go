@@ -1,3 +1,3 @@
 package time_management_slackapp
 
-//go:generate sqlboiler mysql
+//go:generate sqlboiler --add-global-variants mysql

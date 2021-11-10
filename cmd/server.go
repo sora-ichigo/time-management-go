@@ -4,32 +4,22 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"net"
 	"net/http"
 	"os"
 	"os/signal"
-	"time_management_slackapp/app/di"
-	"time_management_slackapp/app/server"
 	"syscall"
 	"time"
+	"time_management_slackapp/app/di"
+	"time_management_slackapp/app/server"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
-	"github.com/lestrrat-go/server-starter/listener"
 )
 
-const port = 8080
+const port = 8000
 
-func netListen(network, addr string) (net.Listener, error) {
-	ls, err := listener.ListenAll()
-	if err == nil {
-		return ls[0], nil
-	}
-	return net.Listen(network, addr)
-}
-
-func createRouter(contentHandler server.ContentServer) chi.Router {
+func createRouter(timePointServer server.TimePointServer) chi.Router {
 	mux := chi.NewRouter()
 	mux.Use(middleware.Logger)
 	mux.Use(cors.New(cors.Options{
@@ -42,14 +32,8 @@ func createRouter(contentHandler server.ContentServer) chi.Router {
 		w.WriteHeader(http.StatusOK)
 	})
 
-	mux.Route("/contents", func(mux chi.Router) {
-		mux.Get("/", contentHandler.GetContents)
-		mux.Post("/", contentHandler.CreateContent)
-		mux.Route("/{contentID}", func(mux chi.Router) {
-			mux.Put("/", contentHandler.UpdateContent)
-			mux.Delete("/", contentHandler.DeleteContent)
-		})
-	})
+	mux.Post("/time_points", timePointServer.CreateTimePoint)
+
 	return mux
 }
 
@@ -67,7 +51,7 @@ func run() {
 	}
 	defer cleanup()
 
-	mux := createRouter(app.ContentServer)
+	mux := createRouter(app.TimePointServer)
 	svr := http.Server{
 		Addr:    fmt.Sprintf(":%d", port),
 		Handler: mux,

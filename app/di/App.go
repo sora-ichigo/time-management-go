@@ -6,6 +6,6 @@ import (
 )
 
 type App struct {
-	ContentServer server.ContentServer
-	Db            *sql.DB
+	TimePointServer server.TimePointServer
+	Db              *sql.DB
 }
