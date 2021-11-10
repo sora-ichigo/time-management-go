@@ -33,17 +33,15 @@ func (t timePointServerImpl) CreateTimePoint(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	// validation
-	if input.Status == "" {
-		log.Printf("Invalid request body.")
-		http.Error(w, "Invalid request body.", http.StatusBadRequest)
+	timePoint := models.TimePoint{Status: input.Status}
 
-		return
+	// validation
+	ok, message := domain.CreateTimePointValidation(timePoint, r.Context(), t.db)
+	if !ok {
+		http.Error(w, message, http.StatusBadRequest)
 	}
 
-	timePoint := models.TimePoint{Status: input.Status}
-	fmt.Printf("timePoint: %v", timePoint)
-
+	// save DB
 	if err := timePoint.Insert(r.Context(), t.db, boil.Infer()); err != nil {
 		log.Printf("failed to create time point. err: %v", err)
 		http.Error(w, fmt.Sprintf("failed to create time point. err: %v", err), http.StatusInternalServerError)
