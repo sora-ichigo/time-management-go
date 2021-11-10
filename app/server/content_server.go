@@ -6,8 +6,8 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"starter-restapi-golang/app/models"
-	"starter-restapi-golang/app/validator"
+	"time_management_slackapp/app/models"
+	"time_management_slackapp/app/validator"
 	"strconv"
 
 	"github.com/go-chi/chi"

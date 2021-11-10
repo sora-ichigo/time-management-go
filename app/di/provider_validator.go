@@ -1,7 +1,7 @@
 package di
 
 import (
-	"starter-restapi-golang/app/validator"
+	"time_management_slackapp/app/validator"
 
 	"github.com/google/wire"
 )

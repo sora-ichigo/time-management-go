@@ -1,7 +1,7 @@
 package validator
 
 import (
-	"starter-restapi-golang/app/models"
+	"time_management_slackapp/app/models"
 
 	validation "github.com/go-ozzo/ozzo-validation"
 )

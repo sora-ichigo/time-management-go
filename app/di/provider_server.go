@@ -3,8 +3,8 @@ package di
 import (
 	"context"
 	"database/sql"
-	"starter-restapi-golang/app/server"
-	"starter-restapi-golang/app/validator"
+	"time_management_slackapp/app/server"
+	"time_management_slackapp/app/validator"
 
 	"github.com/google/wire"
 )

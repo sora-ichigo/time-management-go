@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"starter-restapi-golang/app/di"
-	"starter-restapi-golang/app/server"
+	"time_management_slackapp/app/di"
+	"time_management_slackapp/app/server"
 	"syscall"
 	"time"
 
