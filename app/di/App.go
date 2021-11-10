@@ -2,10 +2,10 @@ package di
 
 import (
 	"database/sql"
-	"starter-restapi-golang/app/server"
+	"time_management_slackapp/app/server"
 )
 
 type App struct {
-	ContentServer server.ContentServer
-	Db            *sql.DB
+	TimePointServer server.TimePointServer
+	Db              *sql.DB
 }

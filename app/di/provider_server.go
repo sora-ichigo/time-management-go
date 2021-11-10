@@ -1,18 +1,16 @@
 package di
 
 import (
-	"context"
 	"database/sql"
-	"starter-restapi-golang/app/server"
-	"starter-restapi-golang/app/validator"
+	"time_management_slackapp/app/server"
 
 	"github.com/google/wire"
 )
 
-func provideContentServer(ctx context.Context, db *sql.DB, v validator.ContentValidator) server.ContentServer {
-	return server.NewContentServer(ctx, db, v)
+func provideTimePointServer(db *sql.DB) server.TimePointServer {
+	return server.NewTimePointServer(db)
 }
 
 var ServerSet = wire.NewSet(
-	provideContentServer,
+	provideTimePointServer,
 )

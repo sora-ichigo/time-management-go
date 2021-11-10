@@ -1,4 +1,4 @@
-module starter-restapi-golang
+module time_management_slackapp
 
 go 1.16
 
@@ -11,6 +11,7 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/google/wire v0.5.0
 	github.com/lestrrat-go/server-starter v0.0.0-20210101230921-50cd1900b5bc
-	github.com/volatiletech/sqlboiler/v4 v4.6.0
+	github.com/volatiletech/sqlboiler v3.7.1+incompatible // indirect
+	github.com/volatiletech/sqlboiler/v4 v4.7.1
 	github.com/volatiletech/strmangle v0.0.1
 )
