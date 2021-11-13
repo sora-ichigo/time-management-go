@@ -33,6 +33,7 @@ func createRouter(timePointServer server.TimePointServer) chi.Router {
 	})
 
 	mux.Post("/time_points", timePointServer.CreateTimePoint)
+	mux.Get("/time_points_sum", timePointServer.GetTimePointsSum)
 
 	return mux
 }
