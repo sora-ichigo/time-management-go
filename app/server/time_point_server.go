@@ -78,53 +78,19 @@ func (t timePointServerImpl) GetTimePointsSum(w http.ResponseWriter, r *http.Req
 	}
 	resp := domain.GetTimePointsSumResponse{}
 
+	// それぞれの日で 稼働時間を算出する
 	for i := 0; i <= dayRange; i++ {
-		today := time.Now().AddDate(0, 0, -i)
-		todayY, todayM, todayD := today.Date()
-		startOfDay := time.Date(todayY, todayM, todayD, 0, 0, 0, 0, time.FixedZone("Asia/Tokyo", 0))
-		endOfDay := time.Date(todayY, todayM, todayD, 23, 59, 59, 0, time.FixedZone("Asia/Tokyo", 0))
+		date := time.Now().AddDate(0, 0, -i)
+		_, dateM, dateD := date.Date()
 
-		timePoints, err := models.TimePoints(models.TimePointWhere.PushedAt.GTE(startOfDay), models.TimePointWhere.PushedAt.LTE(endOfDay)).All(r.Context(), t.db)
+		var err error
+		resp[domain.Day(fmt.Sprintf("%02d/%02d\n", dateM, dateD))], err = domain.CalcTimePointSum(date, r.Context(), t.db)
 		if err != nil {
 			log.Printf("failed to fetch time points. err: %v", err)
 			http.Error(w, fmt.Sprintf("failed to fetch time points. err: %v", err), http.StatusInternalServerError)
 
 			return
 		}
-
-		// timePoints から合計時間を集計する
-		peer := [][]time.Time{}
-
-		// start, end でペアを組んで 二次元配列に格納する
-		for i := 0; i < len(timePoints); i++ {
-			tp1 := timePoints[i]
-
-			if i == 0 && tp1.Status == "end" {
-				// 最初の要素で, status == "end" だったら00:00 とペアにする
-				peer = append(peer, []time.Time{startOfDay, tp1.PushedAt})
-				continue
-			} else if i == len(timePoints)-1 && tp1.Status == "start" {
-				// 最後の要素で, status == "start" だったら23:59 とペアにする
-				peer = append(peer, []time.Time{tp1.PushedAt, endOfDay})
-				continue
-			}
-
-			// 上記以外のパターンは連番でペアを組み、iをさらに1進める(合計 2 進む)
-			tp2 := timePoints[i+1]
-			peer = append(peer, []time.Time{tp1.PushedAt, tp2.PushedAt})
-			i++
-		}
-
-		// 作成した peer 稼働時間を算出する
-		sum := time.Duration(0)
-		for _, p := range peer {
-			diff := p[1].Sub(p[0])
-			sum += diff
-		}
-		h := sum / time.Hour
-		sum -= h * time.Hour
-		m := sum / time.Minute
-		resp[domain.Day(fmt.Sprintf("%02d/%02d\n", todayM, todayD))] = domain.TimePointsSum(fmt.Sprintf("%02d:%02d\n", h, m))
 	}
 
 	b, err := json.Marshal(resp)
