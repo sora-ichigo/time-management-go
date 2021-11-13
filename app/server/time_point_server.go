@@ -16,7 +16,7 @@ import (
 
 type TimePointServer interface {
 	CreateTimePoint(w http.ResponseWriter, r *http.Request)
-	GetTimePointsSum(w http.ResponseWriter, r *http.Request)
+	GetTimePointsSumOfDays(w http.ResponseWriter, r *http.Request)
 }
 
 type timePointServerImpl struct {
@@ -58,13 +58,13 @@ func (t timePointServerImpl) CreateTimePoint(w http.ResponseWriter, r *http.Requ
 	return
 }
 
-func (t timePointServerImpl) GetTimePointsSum(w http.ResponseWriter, r *http.Request) {
+func (t timePointServerImpl) GetTimePointsSumOfDays(w http.ResponseWriter, r *http.Request) {
 	// 時間取得の日数 0 ~ 6 日前まで
-	dayRange := 0
-	dayRangeQuery, ok := r.URL.Query()["day_range"]
-	if ok {
+	fetchDays := 0
+	fetchDaysQuery, ok := r.URL.Query()["fetch_days"]
+	if ok && fetchDaysQuery[0] != "" {
 		var err error
-		dayRange, err = strconv.Atoi(dayRangeQuery[0])
+		fetchDays, err = strconv.Atoi(fetchDaysQuery[0])
 		if err != nil {
 			log.Printf("failed to parse day_range err: %v", err)
 			http.Error(w, fmt.Sprintf("failed to parse day_range err: %v", err), http.StatusBadRequest)
@@ -72,19 +72,19 @@ func (t timePointServerImpl) GetTimePointsSum(w http.ResponseWriter, r *http.Req
 			return
 		}
 
-		if dayRange > 6 {
-			dayRange = 6
+		if fetchDays > 6 {
+			fetchDays = 6
 		}
 	}
 	resp := domain.GetTimePointsSumResponse{}
 
 	// それぞれの日で 稼働時間を算出する
-	for i := 0; i <= dayRange; i++ {
+	for i := 0; i <= fetchDays; i++ {
 		date := time.Now().AddDate(0, 0, -i)
 		_, dateM, dateD := date.Date()
 
 		var err error
-		resp[domain.Day(fmt.Sprintf("%02d/%02d\n", dateM, dateD))], err = domain.CalcTimePointSum(date, r.Context(), t.db)
+		resp[domain.Day(fmt.Sprintf("%02d/%02d\n", dateM, dateD))], err = domain.CalcTimePointSumOfDay(r.Context(), date, t.db)
 		if err != nil {
 			log.Printf("failed to fetch time points. err: %v", err)
 			http.Error(w, fmt.Sprintf("failed to fetch time points. err: %v", err), http.StatusInternalServerError)

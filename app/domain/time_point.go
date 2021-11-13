@@ -53,7 +53,7 @@ func CreateTimePointValidation(t models.TimePoint, ctx context.Context, db *sql.
 }
 
 // 特定の日の稼働時間を算出する
-func CalcTimePointSum(date time.Time, ctx context.Context, db *sql.DB) (TimePointSum, error) {
+func CalcTimePointSumOfDay(ctx context.Context, date time.Time, db *sql.DB) (TimePointSum, error) {
 	year, month, day := date.Date()
 	startOfDay := time.Date(year, month, day, 0, 0, 0, 0, time.FixedZone("Asia/Tokyo", 0))
 	endOfDay := time.Date(year, month, day, 23, 59, 59, 0, time.FixedZone("Asia/Tokyo", 0))
