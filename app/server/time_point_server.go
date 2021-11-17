@@ -84,7 +84,7 @@ func (t timePointServerImpl) GetTimePointsSumOfDays(w http.ResponseWriter, r *ht
 		_, dateM, dateD := date.Date()
 
 		var err error
-		resp[domain.Day(fmt.Sprintf("%02d/%02d\n", dateM, dateD))], err = domain.CalcTimePointSumOfDay(r.Context(), date, t.db)
+		resp[domain.Day(fmt.Sprintf("%02d/%02d", dateM, dateD))], err = domain.CalcTimePointSumOfDay(r.Context(), date, t.db)
 		if err != nil {
 			log.Printf("failed to fetch time points. err: %v", err)
 			http.Error(w, fmt.Sprintf("failed to fetch time points. err: %v", err), http.StatusInternalServerError)
