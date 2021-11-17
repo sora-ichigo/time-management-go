@@ -43,7 +43,7 @@ func CreateTimePointValidation(t models.TimePoint, ctx context.Context, db *sql.
 	// 最新の一件を取得
 	prevTimePoint, err := models.TimePoints(qm.OrderBy("id DESC")).One(ctx, db)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
-		return false, "failed find timePoint record"
+		return false, "failed to find timePoint record"
 	}
 
 	if prevTimePoint == nil && t.Status == "end" || (prevTimePoint != nil && prevTimePoint.Status == t.Status) {
@@ -95,5 +95,5 @@ func CalcTimePointSumOfDay(ctx context.Context, date time.Time, db *sql.DB) (Tim
 	h := sum / time.Hour
 	sum -= h * time.Hour
 	m := sum / time.Minute
-	return TimePointSum(fmt.Sprintf("%02d:%02d\n", h, m)), nil
+	return TimePointSum(fmt.Sprintf("%02d:%02d", h, m)), nil
 }
