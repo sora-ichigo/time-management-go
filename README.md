@@ -1,4 +1,4 @@
-# Golang REST API template
+# 時間管理 slack app サーバAPI
 This Repository is quick start template for REST API.
 
 ☑️ docker-compose
