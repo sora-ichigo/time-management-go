@@ -1,18 +1,21 @@
-FROM nginx:latest
+##  App
+##-----------------------------------------------b
+FROM golang:latest as build-env
 
-# RUN apt-get update && apt-get upgrade -y
-# RUN apt-get install -y curl gnupg2 make
-# RUN curl -L https://github.com/golang-migrate/migrate/releases/download/v4.11.0/migrate.linux-amd64.tar.gz | tar xvz
-# RUN mv ./migrate.linux-amd64 /usr/bin/migrate
-# 
-# RUN mkdir app
-# WORKDIR app 
-# ADD . .
-# 
-# ENV DSN OOOOOOOOOOOOOOOOOO
-# ENV PATH $(go env GOPATH)/bin:$PATH
-# 
-# RUN make setup
-# RUN make migrate
-# 
-# ENV PATH /app/bin:$PATH
+ENV APP_ROOT $GOPATH/src/time-management-go
+RUN ln -s $APP_ROOT/ /app
+WORKDIR /app 
+COPY . $APP_ROOT/
+RUN	go build -o ./bin ./cmd/server.go
+
+##  Runtime build stage
+##-----------------------------------------------
+FROM debian:10.8-slim
+RUN mkdir app
+
+COPY --from=build-env /app/bin /app/bin
+ENV PATH /app/bin:$PATH
+RUN chmod a+x bin/*
+
+EXPOSE 8000
+CMD ["server"]
