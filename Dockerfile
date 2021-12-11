@@ -1,10 +1,21 @@
-FROM ubuntu:18.04
+##  App
+##-----------------------------------------------b
+FROM golang:latest as build-env
 
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y curl gnupg2 vim
-RUN curl -L https://github.com/golang-migrate/migrate/releases/download/v4.11.0/migrate.linux-amd64.tar.gz | tar xvz
-RUN mv ./migrate.linux-amd64 /usr/bin/migrate
+ENV APP_ROOT $GOPATH/src/time-management-go
+RUN ln -s $APP_ROOT/ /app
+WORKDIR /app 
+COPY . $APP_ROOT/
+RUN GOOS=linux	go build -o ./bin ./cmd/server.go
 
+##  Runtime build stage
+##-----------------------------------------------
+FROM debian:10.8-slim
 RUN mkdir app
-WORKDIR app 
-ADD . .
+
+COPY --from=build-env /app/bin /app/bin
+ENV PATH /app/bin:$PATH
+RUN chmod a+x bin/*
+
+EXPOSE 8000
+CMD ["server"]
