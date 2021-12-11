@@ -6,7 +6,7 @@ ENV APP_ROOT $GOPATH/src/time-management-go
 RUN ln -s $APP_ROOT/ /app
 WORKDIR /app 
 COPY . $APP_ROOT/
-RUN	go build -o ./bin ./cmd/server.go
+RUN GOOS=linux	go build -o ./bin ./cmd/server.go
 
 ##  Runtime build stage
 ##-----------------------------------------------

@@ -9,17 +9,17 @@
         "logDriver": "awslogs",
         "secretOptions": null,
         "options": {
-          "awslogs-group": "/ecs/example",
+          "awslogs-group": "/ecs/igsr5/prod/time_management_go",
           "awslogs-region": "ap-northeast-1",
-          "awslogs-stream-prefix": "nginx"
+          "awslogs-stream-prefix": "time-management-go"
         }
       },
       "entryPoint": null,
       "portMappings": [
         {
-          "hostPort": 80,
+          "hostPort": 8000,
           "protocol": "tcp",
-          "containerPort": 80
+          "containerPort": 8000
         }
       ],
       "command": null,
@@ -31,13 +31,18 @@
       "dnsServers": null,
       "mountPoints": [],
       "workingDirectory": null,
-      "secrets": null,
+      "secrets": [
+        {
+          "valueFrom": "/igsr5/sandbox/db/username",
+          "name": "WORDPRESS_DB_USER"
+        }
+      ],
       "dockerSecurityOptions": null,
       "memory": null,
       "memoryReservation": null,
       "volumesFrom": [],
       "stopTimeout": null,
-      "image": "nginx:latest",
+      "image": "799705073177.dkr.ecr.ap-northeast-1.amazonaws.com/igsr5:time-management-go",
       "startTimeout": null,
       "firelensConfiguration": null,
       "dependsOn": null,
@@ -54,7 +59,7 @@
       "dockerLabels": null,
       "systemControls": null,
       "privileged": null,
-      "name": "example"
+      "name": "igsr5_time_management_slack"
     }
   ],
   "placementConstraints": [],
@@ -64,8 +69,8 @@
     "EC2",
     "FARGATE"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:799705073177:task-definition/example:4",
-  "family": "example",
+  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:799705073177:task-definition/igsr5_time_management_slack:2",
+  "family": "igsr5_time_management_slack",
   "requiresAttributes": [
     {
       "targetId": null,
@@ -83,7 +88,25 @@
       "targetId": null,
       "targetType": null,
       "value": null,
+      "name": "com.amazonaws.ecs.capability.ecr-auth"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
       "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "ecs.capability.execution-role-ecr-pull"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "ecs.capability.secrets.ssm.environment-variables"
     },
     {
       "targetId": null,
@@ -105,7 +128,7 @@
   "networkMode": "awsvpc",
   "runtimePlatform": null,
   "cpu": "256",
-  "revision": 4,
+  "revision": 2,
   "status": "ACTIVE",
   "inferenceAccelerators": null,
   "proxyConfiguration": null,
