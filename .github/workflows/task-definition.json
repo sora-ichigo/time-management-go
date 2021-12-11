@@ -59,7 +59,7 @@
       "dockerLabels": null,
       "systemControls": null,
       "privileged": null,
-      "name": "igsr5_time_management_slack"
+      "name": "igsr5_time_management_go"
     }
   ],
   "placementConstraints": [],
@@ -69,7 +69,7 @@
     "EC2",
     "FARGATE"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:799705073177:task-definition/igsr5_time_management_slack:2",
+  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:799705073177:task-definition/igsr5_time_management_slack:3",
   "family": "igsr5_time_management_slack",
   "requiresAttributes": [
     {
