@@ -38,19 +38,14 @@ jobs:
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
-        env:
-          ECS_CONTAINER_NAME: ${{ secrets.AWS_ECS_CONTAINER_NAME }}
         with:
           task-definition: .github/workflows/task-definition.json
-          container-name: env.ECS_CONTAINER_NAME
+          container-name: igsr5_time_management_go
           image: ${{ steps.build-image.outputs.image }}
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        env:
-          ECS_CLUSTER: ${{ secrets.AWS_ECS_CLUSTER }}
-          ECS_SERVICE: ${{ secrets.AWS_ECS_SERVICE }}
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: env.ECS_SERVICE
-          cluster: env.ECS_CLUSTER
+          service: igsr5
+          cluster: igsr5_time_management_slack
           wait-for-service-stability: true
