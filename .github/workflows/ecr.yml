@@ -32,7 +32,7 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPO_NAME }}
           ECR_REPOSITORY_TAG: ${{ secrets.AWS_ECR_REPO_TAG }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$ECR_REPOSITORY_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$ECR_REPOSITORY_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$ECR_REPOSITORY_TAG"
       - name: Fill in the new image ID in the Amazon ECS task definition
