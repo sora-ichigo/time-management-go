@@ -46,6 +46,6 @@ jobs:
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: igsr5
-          cluster: igsr5_time_management_slack
+          service: igsr5_time_management_slack
+          cluster: igsr5
           wait-for-service-stability: true
