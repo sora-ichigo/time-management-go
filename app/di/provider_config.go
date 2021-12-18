@@ -12,6 +12,7 @@ import (
 
 func DSN() string {
 	dsn := os.Getenv("DSN")
+	log.Printf("DSN is %s", dsn)
 
 	if dsn != "" {
 		return dsn

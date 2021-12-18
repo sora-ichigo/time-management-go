@@ -33,8 +33,8 @@
       "workingDirectory": null,
       "secrets": [
         {
-          "valueFrom": "/igsr5/sandbox/db/username",
-          "name": "WORDPRESS_DB_USER"
+          "valueFrom": "/igsr5/time_management_slack/dsn",
+          "name": "DSN"
         }
       ],
       "dockerSecurityOptions": null,
@@ -60,6 +60,77 @@
       "systemControls": null,
       "privileged": null,
       "name": "igsr5_time_management_go"
+    },
+    {
+      "dnsSearchDomains": null,
+      "environmentFiles": null,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "secretOptions": null,
+        "options": {
+          "awslogs-group": "/ecs/igsr5/prod/time_management_bolt",
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "time-management-bolt"
+        }
+      },
+      "entryPoint": null,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "protocol": "tcp",
+          "containerPort": 80
+        }
+      ],
+      "command": null,
+      "linuxParameters": null,
+      "cpu": 0,
+      "environment": [],
+      "resourceRequirements": null,
+      "ulimits": null,
+      "dnsServers": null,
+      "mountPoints": [],
+      "workingDirectory": null,
+      "secrets": [
+        {
+          "valueFrom": "/igsr5/time_management_slack/bot_user_oauth_token",
+          "name": "BOT_USER_OAUTH_TOKEN"
+        },
+        {
+          "valueFrom": "/igsr5/time_management_slack/signing_secret",
+          "name": "SIGNING_SECRET"
+        },
+        {
+          "valueFrom": "/igsr5/time_management_slack/auth_user_id",
+          "name": "AUTH_USER_ID"
+        },
+        {
+          "valueFrom": "/igsr5/time_management_slack/auth_user_name",
+          "name": "AUTH_USER_NAME"
+        }
+      ],
+      "dockerSecurityOptions": null,
+      "memory": null,
+      "memoryReservation": null,
+      "volumesFrom": [],
+      "stopTimeout": null,
+      "image": "799705073177.dkr.ecr.ap-northeast-1.amazonaws.com/igsr5:time-management-bolt",
+      "startTimeout": null,
+      "firelensConfiguration": null,
+      "dependsOn": null,
+      "disableNetworking": null,
+      "interactive": null,
+      "healthCheck": null,
+      "essential": true,
+      "links": null,
+      "hostname": null,
+      "extraHosts": null,
+      "pseudoTerminal": null,
+      "user": null,
+      "readonlyRootFilesystem": null,
+      "dockerLabels": null,
+      "systemControls": null,
+      "privileged": null,
+      "name": "igsr5_time_management_bolt"
     }
   ],
   "placementConstraints": [],
@@ -69,7 +140,7 @@
     "EC2",
     "FARGATE"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:799705073177:task-definition/igsr5_time_management_slack:3",
+  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:799705073177:task-definition/igsr5_time_management_slack:10",
   "family": "igsr5_time_management_slack",
   "requiresAttributes": [
     {
@@ -128,7 +199,7 @@
   "networkMode": "awsvpc",
   "runtimePlatform": null,
   "cpu": "256",
-  "revision": 3,
+  "revision": 10,
   "status": "ACTIVE",
   "inferenceAccelerators": null,
   "proxyConfiguration": null,
