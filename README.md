@@ -13,8 +13,6 @@ This Repository is quick start template for REST API.
 
 ☑️ [ozzo-validation](https://github.com/go-ozzo/ozzo-validation)
 
-☑️ handler template
-
 ☑️ Makefile
 
 ☑️ GitHub Action
@@ -30,8 +28,7 @@ $ make setup
 
 ### Run
 ```sh
-$ docker compose start
-$ go run ./cmd/server.go
+$ docker compose start && go run ./cmd/server.go
 ```
 
 ### Build
@@ -47,8 +44,13 @@ $ make gen
 
 ### Migrate
 ```sh
+# when not permission error
+$ docker compose start && docker compose exec app chmod +x ./script/migrate-XX
+
+#create
+$ docker compose start && docker compose exec app ./script/migrate-create XXXXXX
 # up
-$ make migrate-up
+$ docker compose start && docker compose exec app ./script/migrate-up
 # down
-$ make migrate-down
+$ docker compose start && docker compose exec app ./script/migrate-down
 ```

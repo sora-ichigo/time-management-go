@@ -1,0 +1,3 @@
+#!/bin/sh
+chmod +x ./script/migrate-up
+migrate -database "mysql://$DSN" -path migrate/. up
