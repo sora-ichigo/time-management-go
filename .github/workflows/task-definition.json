@@ -35,6 +35,26 @@
         {
           "valueFrom": "/igsr5/time_management_slack/dsn",
           "name": "DSN"
+        },
+        {
+          "valueFrom": "/igsr5/time_management_slack/bot_user_oauth_token",
+          "name": "BOT_USER_OAUTH_TOKEN"
+        },
+        {
+          "valueFrom": "/igsr5/time_management_slack/signing_secret",
+          "name": "SIGNING_SECRET"
+        },
+        {
+          "valueFrom": "/igsr5/time_management_slack/app_token",
+          "name": "APP_TOKEN"
+        },
+        {
+          "valueFrom": "/igsr5/time_management_slack/auth_user_id",
+          "name": "AUTH_USER_ID"
+        },
+        {
+          "valueFrom": "/igsr5/time_management_slack/auth_user_name",
+          "name": "AUTH_USER_NAME"
         }
       ],
       "dockerSecurityOptions": null,
@@ -74,13 +94,6 @@
         }
       },
       "entryPoint": null,
-      "portMappings": [
-        {
-          "hostPort": 80,
-          "protocol": "tcp",
-          "containerPort": 80
-        }
-      ],
       "command": null,
       "linuxParameters": null,
       "cpu": 0,
@@ -92,12 +105,20 @@
       "workingDirectory": null,
       "secrets": [
         {
+          "valueFrom": "/igsr5/time_management_slack/dsn",
+          "name": "DSN"
+        },
+        {
           "valueFrom": "/igsr5/time_management_slack/bot_user_oauth_token",
           "name": "BOT_USER_OAUTH_TOKEN"
         },
         {
           "valueFrom": "/igsr5/time_management_slack/signing_secret",
           "name": "SIGNING_SECRET"
+        },
+        {
+          "valueFrom": "/igsr5/time_management_slack/app_token",
+          "name": "APP_TOKEN"
         },
         {
           "valueFrom": "/igsr5/time_management_slack/auth_user_id",
@@ -134,13 +155,13 @@
     }
   ],
   "placementConstraints": [],
-  "memory": "512",
+  "memory": "1024",
   "taskRoleArn": null,
   "compatibilities": [
     "EC2",
     "FARGATE"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:799705073177:task-definition/igsr5_time_management_slack:10",
+  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:799705073177:task-definition/igsr5_time_management_slack:17",
   "family": "igsr5_time_management_slack",
   "requiresAttributes": [
     {
@@ -198,8 +219,8 @@
   ],
   "networkMode": "awsvpc",
   "runtimePlatform": null,
-  "cpu": "256",
-  "revision": 10,
+  "cpu": "512",
+  "revision": 17,
   "status": "ACTIVE",
   "inferenceAccelerators": null,
   "proxyConfiguration": null,
