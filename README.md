@@ -1,4 +1,6 @@
 # ⏳ 時間管理 Slack アプリ time-management-slack
+![](https://github.com/igsr5/time-management-go/workflows/Build%20and%20Push/badge.svg)
+![](https://img.shields.io/badge/license-MIT-green)
 
 ![Screen Shot 2021-12-25 at 0 19 37](https://user-images.githubusercontent.com/66525257/147361800-31611653-fde8-47c5-afb1-1ccdbaf9eecf.png)
 ![Screen Shot 2021-12-25 at 0 19 52](https://user-images.githubusercontent.com/66525257/147361804-2eabf20d-40d7-4d2c-876f-7681e71cb651.png)
